@@ -31,3 +31,5 @@ if __name__ == "__main__":
     window.adjustFixedSize()
     window.show()
     app.exec()
+
+testeGit = "teste"
