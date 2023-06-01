@@ -10,7 +10,7 @@ qss = f"""PushButton[cssClass="specialButton"] {{
         color: #fff;
         background: {DARKER_PRIMARY_COLOR};
     }}
-    PushButton[cssClass="specialButton"]: pressed{{
+    PushButton[cssClass="specialButton"]:pressed{{
         color: #fff;
         background: {DARKEST_PRIMARY_COLOR};
     }}
@@ -31,6 +31,3 @@ def setupTheme():
         },
         additional_qss=qss,
     )
-
-
-print(qss)
