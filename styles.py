@@ -2,15 +2,15 @@ import qdarktheme
 
 from consts import DARKER_PRIMARY_COLOR, DARKEST_PRIMARY_COLOR, PRIMARY_COLOR
 
-qss = f"""PushButton[cssClass="specialButton"] {{
+qss = f"""Button[cssClass="specialButton"] {{
         color: #fff;
         background: {PRIMARY_COLOR};
     }}
-    PushButton[cssClass="specialButton"]:hover {{
+    Button[cssClass="specialButton"]:hover {{
         color: #fff;
         background: {DARKER_PRIMARY_COLOR};
     }}
-    PushButton[cssClass="specialButton"]:pressed{{
+    Button[cssClass="specialButton"]:pressed{{
         color: #fff;
         background: {DARKEST_PRIMARY_COLOR};
     }}
