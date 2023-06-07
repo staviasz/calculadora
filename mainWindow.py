@@ -1,11 +1,11 @@
-from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout
+from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QMessageBox
 
 
 class MainWindow(QMainWindow):
     def __init__(self, parent: QWidget | None = None, *args, **kwargs) -> None:
         super().__init__(parent, *args, **kwargs)
 
-        #configurando o layout basico
+        # configurando o layout basico
         self.cw = QWidget()
         self.vLayout = QVBoxLayout()
         self.cw.setLayout(self.vLayout)
@@ -19,3 +19,6 @@ class MainWindow(QMainWindow):
 
     def addWidgetVLayout(self, widget: QWidget):
         self.vLayout.addWidget(widget)
+
+    def makeMsgBox(self):
+        return QMessageBox(self)

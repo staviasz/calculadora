@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QApplication
 from mainWindow import MainWindow
 from display import Display
 from infoLabel import Info
-from buttons import ButtonGrid
+from buttons import ButtonsGrid
 from consts import WINDOW_ICON_PATH
 from styles import setupTheme
 
@@ -29,8 +29,8 @@ if __name__ == "__main__":
     window.addWidgetVLayout(display)
 
     # GridButton
-    buttonGrid = ButtonGrid(display)
-    window.vLayout.addLayout(buttonGrid)
+    buttonsGrid = ButtonsGrid(display, info)
+    window.vLayout.addLayout(buttonsGrid)
 
     # Executando
     window.adjustFixedSize()
