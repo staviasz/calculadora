@@ -21,7 +21,7 @@ if __name__ == "__main__":
     app.setWindowIcon(icon)
 
     # Info Label
-    info = Info("2 + 2 = 4")
+    info = Info()
     window.addWidgetVLayout(info)
 
     # Display

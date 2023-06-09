@@ -5,8 +5,8 @@ from consts import SMALL_FONT_SIZE
 
 
 class Info(QLabel):
-    def __init__(self, text: str, parent: QWidget | None = None) -> None:
-        super().__init__(text, parent)
+    def __init__(self, parent: QWidget | None = None) -> None:
+        super().__init__(parent)
         self.configStyle()
 
     def configStyle(self):

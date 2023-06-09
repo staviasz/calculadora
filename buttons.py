@@ -6,9 +6,6 @@ from utils import isNumOrDot, isEmpty, isValidNumber
 from display import Display
 from infoLabel import Info
 
-# from mainWindow import MainWindow
-# window: MainWindow
-
 
 class Button(QPushButton):
     def __init__(self, *args, **kwargs):
@@ -53,6 +50,13 @@ class ButtonsGrid(QGridLayout):
         self.info.setText(value)
 
     def _makeGrid(self):
+        self.display.eqPressed.connect(self._eq)
+        self.display.delPressed.connect(self.display.backspace)
+        self.display.clearPressed.connect(self._clear)
+        self.display.inputPressed.connect(self._insertToDisplay)
+        self.display.operatorPressed.connect(self._insertOperator)
+        self.display.negativePressed.connect(self._negativeNumber)
+
         buttonsAdd = []
         for row, buttonData in enumerate(self._gridMask):
             for column, buttonText in enumerate(buttonData):
@@ -72,7 +76,7 @@ class ButtonsGrid(QGridLayout):
                 else:
                     self.addWidget(button, row, column)
 
-                self._connectButtonClicked(self._insertButtonTextToDisplay, button)
+                self._connectButtonClicked(self._insertToDisplay, button)
 
     def _connectButtonClicked(self, function, button):
         button.clicked.connect(function)
@@ -81,22 +85,27 @@ class ButtonsGrid(QGridLayout):
         specialButton = button.text()
         if specialButton == "C":
             self._connectButtonClicked(self._clear, button)
-        if specialButton in "+-*/^":
+        if specialButton in "+*/^":
             self._connectButtonClicked(self._insertOperator, button)
         if specialButton == "=":
             self._connectButtonClicked(self._eq, button)
         if specialButton == "◀":
             self._connectButtonClicked(self.display.backspace, button)
+        if specialButton == "-":
+            self._connectButtonClicked(self._negativeNumber, button)
 
-    def _insertButtonTextToDisplay(self):
-        buttonText = self.sender().text()
-        newDisplayValue = self.display.text() + buttonText
+    def _insertToDisplay(self, *args):
+        if len(args) > 0:
+            text = args[0]
+        else:
+            text = self.sender().text()
 
-        if not isValidNumber(newDisplayValue):
-            self._showError("Número inválido")
+        newDisplayValue = self.display.text() + text
+        negativeNumber = self._left is None and text == "-"
+        if not isValidNumber(newDisplayValue) and not negativeNumber:
             return
-
-        self.display.insert(buttonText)
+        self.display.insert(text)
+        self.display.setFocus()
 
     def _clear(self):
         self._left = None
@@ -105,9 +114,13 @@ class ButtonsGrid(QGridLayout):
         self.equation = None
         self.display.clear()
 
-    def _insertOperator(self):
-        buttonText = self.sender().text()
+    def _insertOperator(self, *args):
+        if len(args) > 0:
+            text = args[0]
+        else:
+            text = self.sender().text()
         displayText = self.display.text()
+
         self.display.clear()
 
         if not isValidNumber(displayText) and self._left is None:
@@ -117,14 +130,17 @@ class ButtonsGrid(QGridLayout):
         if self._left is None:
             self._left = float(displayText)
 
-        self._operator = buttonText
+        self._operator = text
         self.equation = f"{self._left} {self._operator} ??"
+        self.display.setFocus()
 
     def _eq(self):
         displayText = self.display.text()
 
         if not isValidNumber(displayText):
             self._showError("Você não digitou nada")
+            return
+        if self._left is None:
             return
 
         self._right = float(displayText)
@@ -151,3 +167,11 @@ class ButtonsGrid(QGridLayout):
     def _showError(self, text):
         self.msgBox.setText(text)
         self.msgBox.exec()
+
+    def _negativeNumber(self, *args):
+        displayText = self.display.text()
+        length = len(displayText)
+        if self._left is None and "-" not in displayText and length == 0:
+            self._insertToDisplay("-") if len(args) > 0 else self._insertToDisplay
+        else:
+            self._insertOperator("-")
